@@ -1,5 +1,6 @@
 package com.lxlib.uavplatform.repository.enity;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -9,25 +10,34 @@ import lombok.Data;
  * @date 2021/09/07
  */
 @Data
+@Builder
 public class User {
     /**
-     * 用户id
+     * 主键ID
      */
     private Integer id;
     /**
+     * 用户ID
+     */
+    private String uuid;
+    /**
      * 用户姓名
      */
-    private String name;
+    private String uname;
     /**
      * 用户密码
      */
     private String password;
     /**
-     * 用户住址
+     * 用户邮箱
      */
-    private String address;
+    private String email;
     /**
-     * 用户手机号
+     * 创建时间
      */
-    private String phone;
+    private Long ctime;
+    /**
+     * 更新时间
+     */
+    private Long utime;
 }

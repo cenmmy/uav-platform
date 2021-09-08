@@ -4,7 +4,70 @@
 
 <mapper namespace="com.lxlib.uavplatform.repository.dao.UserDao">
 
-    <select id="getAllUser" resultType="User">
-        select * from user
+    <sql id="BASE_COLUMN_LIST">
+        id,
+        uuid,
+        uname,
+        password,
+        email,
+        ctime,
+        utime
+    </sql>
+
+    <insert id="insert" parameterType="User">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null">
+                uuid,
+            </if>
+            <if test="uname != null">
+                uname,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="ctime != null">
+                ctime,
+            </if>
+            utime
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null">
+                #{uuid},
+            </if>
+            <if test="uname != null">
+                #{uname},
+            </if>
+            <if test="password != null">
+                #{password},
+            </if>
+            <if test="email != null">
+                #{email},
+            </if>
+            <if test="ctime != null">
+                #{ctime},
+            </if>
+            <choose>
+                <when test="utime != null">
+                    #{utime},
+                </when>
+                <otherwise>
+                    UNIX_TIMESTAMP(NOW(3)) * 1000
+                </otherwise>
+            </choose>
+        </trim>
+    </insert>
+
+    <select id="getUserByName" parameterType="String" resultType="User">
+        select
+        <include refid="BASE_COLUMN_LIST" />
+        from user
+        <where>
+            uname = #{name}
+        </where>
     </select>
 </mapper>

@@ -15,9 +15,18 @@ import java.util.List;
 @Repository
 public interface UserDao {
     /**
-     * 获取全部用户信息
+     * 插入一条用户信息
      *
-     * @return 用户数据
+     * @param user 用户
+     * @return 修改成功的记录数
      */
-    List<User> getAllUser();
+    int insert(User user);
+
+    /**
+     * 通过用户名查询用户信息
+     *
+     * @param name 用户名
+     * @return 用户信息
+     */
+    User getUserByName(String name);
 }

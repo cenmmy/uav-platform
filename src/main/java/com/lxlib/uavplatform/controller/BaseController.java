@@ -27,6 +27,6 @@ public class BaseController {
     @GetMapping("/home")
     public String home() {
         log.info("get request home!");
-        return userDao.getAllUser().toString();
+        return "home";
     }
 }
