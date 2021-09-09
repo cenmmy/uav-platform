@@ -29,6 +29,12 @@
             <if test="email != null">
                 email,
             </if>
+            <if test="salt != null">
+                salt,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
             <if test="ctime != null">
                 ctime,
             </if>
@@ -47,6 +53,12 @@
             </if>
             <if test="email != null">
                 #{email},
+            </if>
+            <if test="salt != null">
+                #{salt},
+            </if>
+            <if test="state != null">
+                #{state},
             </if>
             <if test="ctime != null">
                 #{ctime},
