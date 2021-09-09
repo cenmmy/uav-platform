@@ -9,6 +9,9 @@
         uuid,
         uname,
         password,
+        roles,
+        salt,
+        state,
         email,
         ctime,
         utime

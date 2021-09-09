@@ -1,5 +1,7 @@
 package com.lxlib.uavplatform.controller;
 
+import com.lxlib.uavplatform.exception.BusinessException;
+import com.lxlib.uavplatform.exception.SystemException;
 import com.lxlib.uavplatform.repository.dao.UserDao;
 import com.lxlib.uavplatform.service.BaseService;
 import com.lxlib.uavplatform.service.dto.RegisterInfoDTO;
@@ -24,13 +26,17 @@ public class BaseController {
     @PostMapping("/register")
     public String register(@RequestBody RegisterInfoDTO info) {
         try {
-            Integer res = baseService.register(info);
-            return "" + res;
-        } catch (InvalidParameterException e) {
-            log.error("参数不合法！error: ", e);
+            baseService.register(info);
+            return "注册成功！";
+        } catch (SystemException e) {
+            log.error("系统异常: ex: ", e);
+            return e.getMessage();
+        } catch (BusinessException e) {
+            log.error("业务异常: ex: ", e);
+            return e.getMessage();
         } catch (Exception e) {
-            log.error("系统异常！error: ", e);
+            log.error("未知异常！error: ", e);
+            return e.getMessage();
         }
-        return "error!";
     }
 }
