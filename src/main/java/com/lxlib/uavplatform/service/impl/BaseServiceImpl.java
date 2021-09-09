@@ -6,12 +6,16 @@ import com.lxlib.uavplatform.repository.enity.User;
 import com.lxlib.uavplatform.service.BaseService;
 import com.lxlib.uavplatform.service.PasswordEncryptService;
 import com.lxlib.uavplatform.service.dto.RegisterInfoDTO;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.security.InvalidParameterException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.UUID;
 
 /**
@@ -30,9 +34,11 @@ public class BaseServiceImpl implements BaseService {
 
     @Resource
     PasswordEncryptService passwordEncryptService;
+    @Resource
+    SecurityManager securityManager;
 
     @Override
-    public Integer register(RegisterInfoDTO info) {
+    public void register(RegisterInfoDTO info) {
         // 参数前置校验
         if (info == null || info.getUname() == null || info.getPassword() == null) {
             throw new InvalidParameterException();
@@ -53,6 +59,19 @@ public class BaseServiceImpl implements BaseService {
                 .ctime(System.currentTimeMillis())
                 .utime(System.currentTimeMillis()).build();
 
-        return userDao.insert(user);
+        userDao.insert(user);
+    }
+
+    @Override
+    public Boolean login(String username, String password) {
+        if (username == null || password == null) {
+            throw new BusinessException("参数不合法！");
+        }
+
+        SecurityUtils.setSecurityManager(securityManager);
+        Subject subject = SecurityUtils.getSubject();
+        AuthenticationToken token = new UsernamePasswordToken(username, password);
+        subject.login(token);
+        return subject.isAuthenticated();
     }
 }

@@ -39,4 +39,25 @@ public class BaseController {
             return e.getMessage();
         }
     }
+
+    @PostMapping("/login")
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
+        try {
+            Boolean hasLogin = baseService.login(username, password);
+            if (hasLogin) {
+                return "登录成功！";
+            } else {
+                return "账号或密码名错误";
+            }
+        }  catch (SystemException e) {
+            log.error("系统异常: ex: ", e);
+            return e.getMessage();
+        } catch (BusinessException e) {
+            log.error("业务异常: ex: ", e);
+            return e.getMessage();
+        } catch (Exception e) {
+            log.error("未知异常！error: ", e);
+            return e.getMessage();
+        }
+    }
 }
